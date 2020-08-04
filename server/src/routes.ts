@@ -1,56 +1,12 @@
 import express from 'express';
-import db from './database/connection';
-import convertHourToMin from './utils/convertHourtoMin';
+import ClassesController from './controllers/ClassesControllers';
 
 
 const routes = express.Router();
+const classesController = new ClassesController();
 
-interface IScheduleItem{
-  week_day: number;
-  from: string;
-  to: string;
- 
-}
-routes.post('/classes', async (request, response) => {
-  const trx = await db.transaction();
+routes.post('/classes', classesController.create);
+routes.get('/classes', classesController.index);
 
-  try {
-  
-    const {name, avatar, whatsapp, bio, subject, cost, schedule } = request.body;
-   
-    const insertedUsersIds = await trx('users').insert({
-      name, avatar, whatsapp, bio,
-    });
-
-    const user_id = insertedUsersIds[0];
-    const insertedClassesIds = await trx('classes').insert({
-      subject,
-      cost,
-      user_id,
-    })
-    const class_id = insertedClassesIds[0];
-
-    const classSchedule = schedule.map((scheduleItem:IScheduleItem) => {
-      return {
-        class_id,
-        week_day: scheduleItem.week_day,
-        from: convertHourToMin(scheduleItem.from),
-        to: convertHourToMin(scheduleItem.to),
-      };
-    })
-
-    await trx('class_schedule').insert(classSchedule);
-    await trx.commit();
-
-    return response.send();
-  } catch (error) {
-      await trx.rollback();
-
-      return response.status(400).json({
-      error: 'Unexpecte error whitle creating new clss'
-    })
-    
-  }
-});
 
 export default routes;
