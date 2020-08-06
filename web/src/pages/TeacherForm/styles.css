@@ -87,6 +87,7 @@ color: var(--color-primary-dark);
   font: 700 1.6rem Archivo;
   justify-content: center;
   text-decoration: none;
+  align-items: center;
   transition: background-color 0.2s;
   margin-top: 3.2rem;
 }
