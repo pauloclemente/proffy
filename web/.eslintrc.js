@@ -23,6 +23,7 @@ module.exports = {
 	},
 	plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
 	rules: {
+    'react/jsx-no-target-blank':'off',
 		'react/prop-types': 'off',
 		'@typescript-eslint/explicit-module-boundary-types': 'off',
 		'prettier/prettier': 'error',
@@ -35,7 +36,15 @@ module.exports = {
 				singleQuote: true,
 				trailingComma: 'all',
 			},
-		],
+    ],
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        'selector': 'interface',
+        'format': ['PascalCase'],
+        'prefix':['I']
+      }
+    ]
 	},
 
 	settings: {
