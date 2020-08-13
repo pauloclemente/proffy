@@ -1,5 +1,7 @@
 import React, { useState } from  'react';
-import { View, ScrollView, Text, TextInput, AsyncStorage } from 'react-native';
+import { View, ScrollView, Text, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 
@@ -7,6 +9,7 @@ import styles from './styles';
 import PageHeader from '../../components/PageHeader';
 import TeacherItem, { ITeacherDTO } from '../../components/TeacherItem';
 import api from '../../services/api';
+import { useFocusEffect } from '@react-navigation/native';
 
 function TeacherList(){
   const [teachers, setTeachers] = useState([]);
@@ -16,6 +19,7 @@ function TeacherList(){
   const [subject, setSubject] = useState('');
   const [week_day, setWeekDay] = useState('');
   const [time, setTime] = useState('');
+
   function loadFavorites(){
     AsyncStorage.getItem('favorites').then(response => {
       if(response) {
@@ -25,6 +29,7 @@ function TeacherList(){
       }
     });
   }
+ 
   async function handleFilterSubmit(){
     loadFavorites()
     const response = await api.get('classes', {
